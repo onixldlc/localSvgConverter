@@ -4,75 +4,16 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>converter</title>
+	<script type="module" src="converter.js"></script>
+	<script type="text/javascript" src="index.js" defer></script>
 </head>
 <body>
 	<input id="inpt" type="file" name="">
 	<input id="inpt_width" type="text" name="" placeholder="width">
 	<input id="inpt_height" type="text" name="" placeholder="height">
-
-	<button id="converterButton">convert</button>
-	<p id="output"></p>
-	<canvas id="canvas"></canvas>
+	<button id="converterButton" onclick="convert()">convert</button>
+	<br>
+	<canvas id="canvas" hidden></canvas>
 	<img id="imgOutput" src="">
 </body>
-
-<script type="module">
-	// Import Canvg from the Skypack CDN
-	import { Canvg } from 'https://cdn.skypack.dev/canvg';
-
-	// Set an initialization variable to null
-	let v = null;
-
-	// Create a function that fires when the
-	// web browser loads the file
-	window.loadSvg = (svg)=>{
-		const ctx = canvas.getContext('2d');
-
-		// Read the SVG string using the fromString method
-		// of Canvg
-		v = Canvg.fromString(ctx, svg);
-
-		// Start drawing the SVG on the canvas
-		v.start();
-	}
-</script>
-
-<script>
-	function convert(){
-		console.log(inpt.value)
-		tempImg.src = inpt.value
-	}
-
-	converterButton.addEventListener('click', function() {
-		let [file] = inpt.files;
-
-		let reader = new FileReader();
-
-		reader.addEventListener('load', function(e) {
-			let text = e.target.result;
-
-			if( (inpt_width.value != "") || (inpt_height.value != "") ){
-				let parser = new DOMParser();
-				let svg = parser.parseFromString(text, 'text/html').getElementsByTagName("svg")[0];
-				svg.width["baseVal"].value = inpt_width.value || svg.width["baseVal"].value
-				svg.height["baseVal"].value = inpt_height.value || svg.height["baseVal"].value
-				text = svg.outerHTML
-			}
-
-
-			// console.log(text)
-			loadSvg(text)
-		});
-
-		// event fired when file reading failed
-		reader.addEventListener('error', function() {
-			alert('Error : Failed to read file');
-		});
-
-		// read file as text file
-		reader.readAsText(file);
-		console.log(reader)
-	});
-
-</script>
 </html>
